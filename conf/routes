@@ -1,0 +1,12 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing how to use dependency injection
+
+GET     /airport/query                controllers.AirportDataController.getAirportDataByQuery
+
+GET     /airport/report/:id           controllers.AirportDataController.getAirportDataInReportById(id)
+
+GET     /airport/report               controllers.AirportDataController.getAirportDataInReport
+
