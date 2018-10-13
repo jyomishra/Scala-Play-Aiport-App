@@ -10,8 +10,7 @@ import services.AirportDataService
  * application's home page.
  */
 @Singleton
-class AirportDataController @Inject()(cc: ControllerComponents, airportService: AirportDataService)(implicit assetsFinder: AssetsFinder)
-  extends AbstractController(cc) {
+class AirportDataController @Inject()(cc: ControllerComponents, airportService: AirportDataService) extends AbstractController(cc) {
 
   implicit val airportWrites = Json.writes[AirportDetail]
   implicit val countryWrites = Json.writes[Country]
@@ -22,9 +21,13 @@ class AirportDataController @Inject()(cc: ControllerComponents, airportService: 
   def getAirportDataByQuery = Action { implicit request:Request[AnyContent] => {
       val requestParam = request.queryString
       if(requestParam.get("name").isDefined) {
-        Ok(Json.toJson(airportService.getAirportDetailsByName(requestParam("name").head)))
+        val airportDetails = airportService.getAirportDetailsByName(requestParam("name").head)
+        if (airportDetails.isEmpty) BadRequest("No Country found with Name : " + requestParam("name").head)
+        else Ok(Json.toJson(airportDetails))
       } else if(requestParam.get("code").isDefined) {
-        Ok(Json.toJson(airportService.getAirportDetailsByCode(requestParam("code").head)))
+        val airportDetails = airportService.getAirportDetailsByName(requestParam("code").head)
+        if (airportDetails.isEmpty) BadRequest("No Country found with Code : " + requestParam("code").head)
+        else Ok(Json.toJson(airportDetails))
       } else {
         BadRequest("wrong Input. Give country name or fuzzy name or code.")
       }
