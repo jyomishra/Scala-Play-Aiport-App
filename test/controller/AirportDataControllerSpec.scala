@@ -47,7 +47,7 @@ class AirportDataControllerSpec extends PlaySpec with MockitoSugar{
         "App Airport", "70.56", "32.43", "43", "EU",
         "IT", "EU", "ITA", "no", "00CO","",
         "ACD", "", "", "")
-      when(mockAirportDataService.getAirportDetailsByName(Matchers.any())).thenReturn(List(apDetail))
+      when(mockAirportDataService.getAirportDetailsByCode(Matchers.any())).thenReturn(List(apDetail))
       val controller = new AirportDataController(stubControllerComponents(),mockAirportDataService)
 
       val airportData = controller.getAirportDataByQuery.apply(FakeRequest(GET, "/airport/query?code=IT", FakeHeaders(Seq.empty), AnyContentAsEmpty))
@@ -60,10 +60,10 @@ class AirportDataControllerSpec extends PlaySpec with MockitoSugar{
 
   "AirportDataController" should {
     "return BadRequest if proper country code is not given" in {
-      when(mockAirportDataService.getAirportDetailsByName(Matchers.any())).thenReturn(List.empty)
+      when(mockAirportDataService.getAirportDetailsByCode(Matchers.any())).thenReturn(List.empty)
       val controller = new AirportDataController(stubControllerComponents(),mockAirportDataService)
 
-      val airportData = controller.getAirportDataByQuery.apply(FakeRequest(GET, "/airport/query?code=IT", FakeHeaders(Seq.empty), AnyContentAsEmpty))
+      val airportData = controller.getAirportDataByQuery.apply(FakeRequest(GET, "/airport/query?code=XYZ", FakeHeaders(Seq.empty), AnyContentAsEmpty))
 
       status(airportData) mustBe BAD_REQUEST
     }

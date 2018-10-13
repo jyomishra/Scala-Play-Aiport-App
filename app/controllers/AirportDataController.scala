@@ -25,7 +25,7 @@ class AirportDataController @Inject()(cc: ControllerComponents, airportService: 
         if (airportDetails.isEmpty) BadRequest("No Country found with Name : " + requestParam("name").head)
         else Ok(Json.toJson(airportDetails))
       } else if(requestParam.get("code").isDefined) {
-        val airportDetails = airportService.getAirportDetailsByName(requestParam("code").head)
+        val airportDetails = airportService.getAirportDetailsByCode(requestParam("code").head)
         if (airportDetails.isEmpty) BadRequest("No Country found with Code : " + requestParam("code").head)
         else Ok(Json.toJson(airportDetails))
       } else {
